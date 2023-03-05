@@ -1,0 +1,79 @@
+[versions]
+#compose
+composeCompiler = "1.4.3"
+composeBom = "2023.01.00"
+composeActivity = "1.6.1"
+composeViewModel = "2.5.1"
+composeNavigation = "2.5.3"
+
+#androidx
+coreKtx = "1.9.0"
+coreSplashScreen = "1.0.0"
+
+#androidTest
+junit = "4.13.2"
+junitExtTest = "1.1.5"
+
+#plugins
+androidGradlePlugins = "7.4.2"
+kotlin = "1.8.10"
+
+[libraries]
+#compose-std-lib
+compose-bom = {module = "androidx.compose:compose-bom",version.ref ="composeBom"}
+compose-animation = {module = "androidx.compose.animation:animation"}
+compose-animation-core = {module = "androidx.compose.animation:animation-core"}
+compose-animation-graphics = {module = "androidx.compose.animation:animation-graphics"}
+compose-foundation = {module = "androidx.compose.foundation:foundation"}
+compose-foundation-layout = {module = "androidx.compose.foundation:foundation-layout"}
+compose-material-icons-core = {module = "androidx.compose.material:material-icons-core"}
+compose-material-icons-extended = {module = "androidx.compose.material:material-icons-extended"}
+compose-material-ripple = {module = "androidx.compose.material:material-ripple"}
+compose-material3-window-sizeclass = {module = "androidx.compose.material3:material3-window-size-class"}
+compose-material3 = {module = "androidx.compose.material3:material3"}
+compose-runtime = {module = "androidx.compose.runtime:runtime"}
+compose-runtime-saveable = {module = "androidx.compose.runtime:runtime-saveable"}
+compose-ui = {module = "androidx.compose.ui:ui"}
+compose-ui-geometry = {module = "androidx.compose.ui:ui-geometry"}
+compose-ui-graphics = {module = "androidx.compose.ui:ui-graphics"}
+compose-ui-text = {module = "androidx.compose.ui:ui-text"}
+compose-ui-text-google-fonts = {module = "androidx.compose.ui:ui-text-google-fonts"}
+compose-ui-unit = {module = "androidx.compose.ui:ui-unit"}
+compose-ui-util = {module = "androidx.compose.ui:ui-util"}
+compose-ui-tooling = {module = "androidx.compose.ui:ui-tooling"}
+compose-ui-tooling-preview = {module = "androidx.compose.ui:ui-tooling-preview"}
+compose-ui-tooling-data = {module = "androidx.compose.ui:ui-tooling-data"}
+
+#compose-integration
+compose-activity = {module ="androidx.activity:activity-compose",version.ref = "composeActivity"}
+compose-viewmodel = {module ="androidx.lifecycle:lifecycle-viewmodel-compose",version.ref = "composeViewModel"}
+compose-navigation = {module ="androidx.navigation:navigation-compose",version.ref = "composeNavigation"}
+
+#compose-test
+compose-ui-test-junit4 = {module = "androidx.compose.ui:ui-test-junit4"}#androidTest
+compose-ui-tooling-test = {module = "androidx.compose.ui:ui-tooling"}#debug
+compose-ui-test-manifest = {module = "androidx.compose.ui:ui-test-manifest"}#debug
+
+#androidx
+core-ktx ={module = "androidx.core:core-ktx",version.ref = "coreKtx"}
+core-splashscreen ={module = "androidx.core:core-splashscreen",version.ref = "coreSplashScreen"}
+
+#androidTest
+junit = {module = "junit:junit",version.ref = "junit"}#test
+junit-ext-test = {module = "androidx.test.ext:junit",version.ref = "junitExtTest"}#androidTest
+
+[bundles]
+composeStdLib = ["compose-animation","compose-animation-core","compose-animation-graphics",
+    "compose-foundation","compose-foundation-layout","compose-material-icons-core",
+    "compose-material-icons-extended","compose-material-ripple","compose-material3",
+    "compose-material3-window-sizeclass","compose-runtime","compose-runtime-saveable",
+    "compose-ui","compose-ui-geometry","compose-ui-graphics","compose-ui-text",
+    "compose-ui-text-google-fonts","compose-ui-unit","compose-ui-util","compose-ui-tooling",
+"compose-ui-tooling-data","compose-ui-tooling-preview"]
+composeIntegrationLib = ["compose-activity","compose-navigation","compose-viewmodel"]
+
+
+[plugins]
+android-application = {id = "com.android.application",version.ref = "androidGradlePlugins"}
+android-library = {id = "com.android.library",version.ref = "androidGradlePlugins"}
+kotlin-android = {id = "org.jetbrains.kotlin.android",version.ref = "kotlin"}
