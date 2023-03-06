@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.shcoding.notediary.navigation.NavigationGraph
+import com.shcoding.notediary.navigation.Screen
 import com.shcoding.notediary.ui.theme.NoteDiaryTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +22,11 @@ class MainActivity : ComponentActivity() {
             NoteDiaryTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    NavigationGraph(
+                        startDestination = Screen.Authentication.route,
+                        navController = navController
+                    )
                 }
             }
         }
