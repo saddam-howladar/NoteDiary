@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.secrets)
 }
 
 android {
@@ -43,6 +44,10 @@ android {
         jvmTarget = "1.8"
     }
 }
+secrets {
+    defaultPropertiesFileName = "secrets.defaults.properties"
+}
+
 
 dependencies {
 
