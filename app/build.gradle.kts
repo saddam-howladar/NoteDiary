@@ -41,12 +41,17 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
+        allWarningsAsErrors = false
+        freeCompilerArgs = freeCompilerArgs + listOf(
+            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+        )
         jvmTarget = "1.8"
     }
 }
 secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
 }
+
 
 
 dependencies {
