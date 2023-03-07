@@ -59,12 +59,28 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.composeStdLib)
     implementation(libs.bundles.composeIntegrationLib)
+
     implementation(libs.core.ktx)
     implementation(libs.core.splashscreen)
 
+    implementation(libs.play.services.auth)
+
+    implementation(libs.stevdzachan.onetapcompose)
+    implementation(libs.stevdzachan.messagebarcompose)
+
+    implementation(libs.realm.base)
+    implementation(libs.realm.sync)
+
+    implementation(libs.kotlinx.coroutine.core)
+    implementation(libs.kotlinx.coroutine.android)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext.test)
+
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling.test)
