@@ -63,7 +63,7 @@ fun AuthenticationScreen() {
                     modifier = Modifier.weight(weight = 1f),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    GoogleButton(loadingState = true) {}
+                    GoogleButton {}
                 }
 
             }
