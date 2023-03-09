@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.secrets)
+    alias(libs.plugins.realm.kotlin)
+   // id("com.google.gms.google-services")
 }
 
 android {
@@ -39,6 +41,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         allWarningsAsErrors = false
@@ -71,8 +74,9 @@ dependencies {
     implementation(libs.realm.base)
     implementation(libs.realm.sync)
 
-    implementation(libs.kotlinx.coroutine.core)
-    implementation(libs.kotlinx.coroutine.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.play.services)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)
@@ -80,6 +84,7 @@ dependencies {
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext.test)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)

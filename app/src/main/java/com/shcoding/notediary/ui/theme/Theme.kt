@@ -6,6 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -77,6 +78,7 @@ private val DarkColorScheme = darkColorScheme(
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
 )
+
 @Composable
 fun NoteDiaryTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -99,6 +101,28 @@ fun NoteDiaryTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+        }
+    }
+    SideEffect {
+        val window = (view.context as Activity).window
+
+        window.apply {
+            statusBarColor = Color.Transparent.toArgb()
+            navigationBarColor = Color.Transparent.toArgb()
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.apply {
+                isNavigationBarContrastEnforced = false
+                isStatusBarContrastEnforced = false
+            }
+
+        }
+
+        val windowInsetsController = WindowCompat.getInsetsController(window, view)
+
+        windowInsetsController.apply {
+            isAppearanceLightStatusBars = !darkTheme
+            isAppearanceLightNavigationBars = !darkTheme
         }
     }
 

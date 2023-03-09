@@ -1,7 +1,9 @@
 package com.shcoding.notediary.presentation.screens.authentication
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shcoding.notediary.BuildConfig
@@ -9,10 +11,14 @@ import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.GoogleAuthType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AuthenticationViewModel : ViewModel() {
+
+    var authenticated by mutableStateOf(false)
+    private set
 
     private val _state = mutableStateOf(AuthenticationState())
     val state: State<AuthenticationState> = _state
@@ -27,7 +33,7 @@ class AuthenticationViewModel : ViewModel() {
                 viewModelScope.launch {
                     try {
                         val result = withContext(Dispatchers.IO) {
-                            App.Companion.create(BuildConfig.APP_ID).login(
+                            App.create(BuildConfig.APP_ID).login(
                                 credentials = Credentials.google(
                                     event.tokenId,
                                     GoogleAuthType.ID_TOKEN
@@ -35,7 +41,14 @@ class AuthenticationViewModel : ViewModel() {
                             ).loggedIn
                         }
                         withContext(Dispatchers.Main) {
-                            event.onSuccess(result)
+                            if (result){
+                                event.onSuccess()
+                                delay(600)
+                                authenticated = true
+                            }else{
+                                event.onError(Exception("User not logged in."))
+                            }
+
                         }
                     } catch (e: Exception) {
                         withContext(Dispatchers.Main) {

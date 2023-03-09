@@ -1,4 +1,4 @@
-package com.shcoding.notediary.presentation.components
+package com.shcoding.notediary.presentation.screens.authentication.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.shcoding.notediary.R
+import com.shcoding.notediary.ui.theme.DevicePreviews
 
 
 @Composable
@@ -90,13 +91,13 @@ fun GoogleButton(
     }
 }
 
-@Preview
+@DevicePreviews
 @Composable
 fun GoogleButtonPreview() {
     GoogleButton {}
 }
 
-@Preview
+@DevicePreviews
 @Composable
 fun GoogleButtonInteractivePreview() {
     GoogleButton(loadingState = true) {}

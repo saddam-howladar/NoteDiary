@@ -85,8 +85,9 @@ junit-ext-test = {module = "androidx.test.ext:junit",version.ref = "junitExtTest
 play-services-auth = {module = "com.google.android.gms:play-services-auth",version.ref = "playServicesAuth"}
 
 #jetbrains
-kotlinx-coroutine-core = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core",version.ref = "coroutine"}
-kotlinx-coroutine-android = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-android",version.ref = "coroutine"}
+kotlinx-coroutines-core = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core",version.ref = "coroutine"}
+kotlinx-coroutines-android = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-android",version.ref = "coroutine"}
+kotlinx-coroutines-play-services = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services",version.ref = "coroutine"}
 
 #realm
 realm-base = {module = "io.realm.kotlin:library-base",version.ref = "realm"}

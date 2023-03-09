@@ -1,34 +1,70 @@
 package com.shcoding.notediary.presentation.screens.authentication
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.shcoding.notediary.BuildConfig
 import com.shcoding.notediary.R
-import com.shcoding.notediary.presentation.components.GoogleButton
+import com.shcoding.notediary.presentation.screens.authentication.components.GoogleButton
+import com.shcoding.notediary.ui.theme.DevicePreviews
 import com.stevdzasan.messagebar.ContentWithMessageBar
+import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState
+import io.realm.kotlin.internal.platform.runBlocking
+import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.Credentials
+import io.realm.kotlin.mongodb.GoogleAuthType
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.koin.androidx.compose.koinViewModel
+import java.io.Serializable
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AuthenticationScreen(viewModel: AuthenticationViewModel = koinViewModel()) {
+fun AuthenticationScreen(
+    viewModel: AuthenticationViewModel = koinViewModel(),
+    navigateToHome: () -> Unit
+) {
+    val oneTapSignInState = rememberOneTapSignInState()
     val loadingState = viewModel.state.value.loadingState
-    val oneTapState = rememberOneTapSignInState()
+    val authenticated = viewModel.authenticated
     val messageBarState = rememberMessageBarState()
-
-    Scaffold() {
+    Scaffold(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.surface)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
 
         ContentWithMessageBar(messageBarState = messageBarState, errorMaxLines = 10) {
 
@@ -76,7 +112,7 @@ fun AuthenticationScreen(viewModel: AuthenticationViewModel = koinViewModel()) {
                         verticalArrangement = Arrangement.Bottom
                     ) {
                         GoogleButton(loadingState = loadingState) {
-                            oneTapState.open()
+                            oneTapSignInState.open()
                             viewModel.onEvent(event = AuthenticationEvent.setLoading(true))
                         }
                     }
@@ -86,29 +122,39 @@ fun AuthenticationScreen(viewModel: AuthenticationViewModel = koinViewModel()) {
             }
         }
     }
+    LaunchedEffect(key1 = authenticated) {
+        if (authenticated) {
+            navigateToHome()
+        }
+    }
+
     OneTapSignInWithGoogle(
-        state = oneTapState,
+        state = oneTapSignInState,
         clientId = BuildConfig.CLIENT_ID,
-        onTokenIdReceived = { tokenId ->
+        onTokenIdReceived = {tokenId ->
             viewModel.onEvent(AuthenticationEvent.signInWithMongoDbAtlas(
                 tokenId = tokenId,
                 onSuccess = {
-                    if (it) {
-                        messageBarState.addSuccess(message = "Sign in successfully.")
-                        viewModel.onEvent(AuthenticationEvent.setLoading(false))
-                    }
+                    messageBarState.addSuccess(message = "Sign in successfully.")
+                    viewModel.onEvent(AuthenticationEvent.setLoading(false))
                 },
                 onError = { e ->
                     messageBarState.addError(Exception(e))
                 }
-            ))
-
-
+            )
+            )
         },
-        onDialogDismissed = { message ->
-            messageBarState.addError(Exception(message))
+        onDialogDismissed = {
 
-        }
-    )
+            messageBarState.addError(Exception(it))
+            viewModel.onEvent(AuthenticationEvent.setLoading(false))
+
+        })
+
 
 }
+
+
+
+
+
