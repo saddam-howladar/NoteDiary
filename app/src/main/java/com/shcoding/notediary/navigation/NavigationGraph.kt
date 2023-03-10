@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.shcoding.notediary.navigation.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
-import com.shcoding.notediary.presentation.screens.authentication.AuthenticationScreen
+import com.shcoding.notediary.presentation.screens.auth.AuthScreen
 import com.shcoding.notediary.presentation.screens.home.HomeScreen
 import com.shcoding.notediary.presentation.screens.write.WriteScreen
 
@@ -16,7 +16,7 @@ import com.shcoding.notediary.presentation.screens.write.WriteScreen
 fun NavigationGraph(startDestination: String, navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = startDestination) {
-        authenticationRoute(navigateToHome = {
+        authRoute(navigateToHome = {
             navController.popBackStack()
             navController.navigate(Screen.Home.route)
         })
@@ -25,18 +25,18 @@ fun NavigationGraph(startDestination: String, navController: NavHostController) 
         },
         navigateToAuthentication = {
             navController.popBackStack()
-            navController.navigate(Screen.Authentication.route)
+            navController.navigate(Screen.Auth.route)
         })
         writeRoute()
     }
 
 }
 
-fun NavGraphBuilder.authenticationRoute(
+fun NavGraphBuilder.authRoute(
     navigateToHome: () -> Unit
 ) {
-    composable(route = Screen.Authentication.route) {
-        AuthenticationScreen(
+    composable(route = Screen.Auth.route) {
+        AuthScreen(
             navigateToHome = navigateToHome
         )
     }
@@ -50,7 +50,7 @@ fun NavGraphBuilder.homeRoute(
 
         HomeScreen(
             navigateToWrite = navigateToHome,
-            navigateToAuthentication = navigateToAuthentication
+            navigateToAuth = navigateToAuthentication
         )
 
     }

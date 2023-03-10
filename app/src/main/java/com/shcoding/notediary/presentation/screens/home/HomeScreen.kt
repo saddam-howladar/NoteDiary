@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import com.shcoding.notediary.presentation.screens.home.components.HomeTopAppBar
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.BuildConfig
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -22,7 +21,7 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     navigateToWrite: () -> Unit,
-    navigateToAuthentication: () -> Unit
+    navigateToAuth: () -> Unit
 ) {
 
     Scaffold(topBar = {
@@ -42,7 +41,7 @@ fun HomeScreen(
             IconButton(onClick = {
                 scope.launch {
                     App.Companion.create(com.shcoding.notediary.BuildConfig.APP_ID).currentUser?.logOut()
-                    navigateToAuthentication()
+                    navigateToAuth()
                 }
             }) {
                 Icon(imageVector = Icons.Default.Logout, contentDescription = "Logout Icon")

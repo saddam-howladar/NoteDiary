@@ -1,4 +1,4 @@
-package com.shcoding.notediary.presentation.screens.authentication
+package com.shcoding.notediary.presentation.screens.auth
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -15,21 +15,21 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AuthenticationViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
 
     var authenticated by mutableStateOf(false)
     private set
 
-    private val _state = mutableStateOf(AuthenticationState())
-    val state: State<AuthenticationState> = _state
+    private val _state = mutableStateOf(AuthState())
+    val state: State<AuthState> = _state
 
-    fun onEvent(event: AuthenticationEvent) {
+    fun onEvent(event: AuthEvent) {
 
         when (event) {
-            is AuthenticationEvent.setLoading -> {
+            is AuthEvent.setLoading -> {
                 _state.value.loadingState = event.loading
             }
-            is AuthenticationEvent.signInWithMongoDbAtlas -> {
+            is AuthEvent.signInWithMongoDbAtlas -> {
                 viewModelScope.launch {
                     try {
                         val result = withContext(Dispatchers.IO) {

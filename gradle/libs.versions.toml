@@ -10,6 +10,9 @@ composeNavigation = "2.5.3"
 coreKtx = "1.9.0"
 coreSplashScreen = "1.0.0"
 
+#desugar
+desugarJdkLibs = "2.0.2"
+
 #androidTest
 junit = "4.13.2"
 junitExtTest = "1.1.5"
@@ -76,6 +79,9 @@ compose-ui-test-manifest = {module = "androidx.compose.ui:ui-test-manifest"}#deb
 #androidx
 core-ktx ={module = "androidx.core:core-ktx",version.ref = "coreKtx"}
 core-splashscreen ={module = "androidx.core:core-splashscreen",version.ref = "coreSplashScreen"}
+
+#Desugar
+desugar-jdk-libs = {module = "com.android.tools:desugar_jdk_libs",version.ref = "desugarJdkLibs"}
 
 #androidTest
 junit = {module = "junit:junit",version.ref = "junit"}#test

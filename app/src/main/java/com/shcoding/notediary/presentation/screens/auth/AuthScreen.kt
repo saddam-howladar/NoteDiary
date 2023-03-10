@@ -1,14 +1,6 @@
-package com.shcoding.notediary.presentation.screens.authentication
+package com.shcoding.notediary.presentation.screens.auth
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,42 +9,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.shcoding.notediary.BuildConfig
 import com.shcoding.notediary.R
-import com.shcoding.notediary.presentation.screens.authentication.components.GoogleButton
-import com.shcoding.notediary.ui.theme.DevicePreviews
+import com.shcoding.notediary.presentation.screens.auth.components.GoogleButton
 import com.stevdzasan.messagebar.ContentWithMessageBar
-import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 import com.stevdzasan.onetap.rememberOneTapSignInState
-import io.realm.kotlin.internal.platform.runBlocking
-import io.realm.kotlin.mongodb.App
-import io.realm.kotlin.mongodb.Credentials
-import io.realm.kotlin.mongodb.GoogleAuthType
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import org.koin.androidx.compose.koinViewModel
-import java.io.Serializable
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AuthenticationScreen(
-    viewModel: AuthenticationViewModel = koinViewModel(),
+fun AuthScreen(
+    viewModel: AuthViewModel = koinViewModel(),
     navigateToHome: () -> Unit
 ) {
     val oneTapSignInState = rememberOneTapSignInState()
@@ -75,7 +49,6 @@ fun AuthenticationScreen(
 
                 Column(
                     modifier = Modifier
-                        //.weight(weight = 9f)
                         .fillMaxWidth()
                         .padding(all = 40.dp),
                     verticalArrangement = Arrangement.Center,
@@ -113,7 +86,7 @@ fun AuthenticationScreen(
                     ) {
                         GoogleButton(loadingState = loadingState) {
                             oneTapSignInState.open()
-                            viewModel.onEvent(event = AuthenticationEvent.setLoading(true))
+                            viewModel.onEvent(event = AuthEvent.setLoading(true))
                         }
                     }
 
@@ -122,21 +95,15 @@ fun AuthenticationScreen(
             }
         }
     }
-    LaunchedEffect(key1 = authenticated) {
-        if (authenticated) {
-            navigateToHome()
-        }
-    }
-
     OneTapSignInWithGoogle(
         state = oneTapSignInState,
         clientId = BuildConfig.CLIENT_ID,
         onTokenIdReceived = {tokenId ->
-            viewModel.onEvent(AuthenticationEvent.signInWithMongoDbAtlas(
+            viewModel.onEvent(AuthEvent.signInWithMongoDbAtlas(
                 tokenId = tokenId,
                 onSuccess = {
                     messageBarState.addSuccess(message = "Sign in successfully.")
-                    viewModel.onEvent(AuthenticationEvent.setLoading(false))
+                    viewModel.onEvent(AuthEvent.setLoading(false))
                 },
                 onError = { e ->
                     messageBarState.addError(Exception(e))
@@ -147,9 +114,17 @@ fun AuthenticationScreen(
         onDialogDismissed = {
 
             messageBarState.addError(Exception(it))
-            viewModel.onEvent(AuthenticationEvent.setLoading(false))
+            viewModel.onEvent(AuthEvent.setLoading(false))
 
         })
+
+
+    LaunchedEffect(key1 = authenticated) {
+        if (authenticated) {
+            navigateToHome()
+        }
+    }
+
 
 
 }
