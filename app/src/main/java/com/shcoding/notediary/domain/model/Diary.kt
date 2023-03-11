@@ -14,7 +14,7 @@ class Diary: RealmObject {
     var mood: String = Mood.Neutral.name
     var title: String = ""
     var description: String = ""
-    var image: RealmList<String> = realmListOf()
+    var images: RealmList<String> = realmListOf()
     var date: RealmInstant =
         RealmInstant.from(epochSeconds = System.currentTimeMillis(), nanosecondAdjustment = 0)
 }
