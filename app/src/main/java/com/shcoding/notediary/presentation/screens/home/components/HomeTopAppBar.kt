@@ -16,7 +16,11 @@ fun HomeTopAppBar(onClickMenu: () -> Unit) {
         },
         navigationIcon = {
             IconButton(onClick = { onClickMenu() }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu Icon")
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu Icon",
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
             }
         },
         actions = {
@@ -24,6 +28,7 @@ fun HomeTopAppBar(onClickMenu: () -> Unit) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = "Date Icon",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

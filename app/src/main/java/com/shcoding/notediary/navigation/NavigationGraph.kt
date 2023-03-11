@@ -20,10 +20,11 @@ fun NavigationGraph(startDestination: String, navController: NavHostController) 
             navController.popBackStack()
             navController.navigate(Screen.Home.route)
         })
-        homeRoute(navigateToHome = {
+        homeRoute(
+            navigateToHome = {
             navController.navigate(Screen.Write.route)
         },
-        navigateToAuthentication = {
+        navigateToAuth = {
             navController.popBackStack()
             navController.navigate(Screen.Auth.route)
         })
@@ -44,13 +45,13 @@ fun NavGraphBuilder.authRoute(
 
 fun NavGraphBuilder.homeRoute(
     navigateToHome: () -> Unit,
-    navigateToAuthentication: () -> Unit
+    navigateToAuth: () -> Unit
 ) {
     composable(route = Screen.Home.route) {
 
         HomeScreen(
             navigateToWrite = navigateToHome,
-            navigateToAuth = navigateToAuthentication
+            navigateToAuth = navigateToAuth
         )
 
     }
