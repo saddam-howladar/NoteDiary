@@ -69,7 +69,7 @@ fun HomeScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     modifier = Modifier
-                        .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+                        .padding(bottom = paddingValues.calculateBottomPadding())
                         .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
                     onClick = { navigateToWrite() }
                 ) {
