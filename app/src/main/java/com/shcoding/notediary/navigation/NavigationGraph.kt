@@ -13,7 +13,7 @@ import com.shcoding.notediary.presentation.screens.home.HomeScreen
 import com.shcoding.notediary.presentation.screens.write.WriteScreen
 
 @Composable
-fun NavigationGraph(startDestination: String, navController: NavHostController) {
+fun NavigationGraph(startDestination: String, navController: NavHostController, onDataLoaded: () -> Unit) {
 
     NavHost(navController = navController, startDestination = startDestination) {
         authRoute(navigateToHome = {
@@ -24,6 +24,9 @@ fun NavigationGraph(startDestination: String, navController: NavHostController) 
             navigateToHome = {
             navController.navigate(Screen.Write.route)
         },
+            onDataLoaded = {
+                          onDataLoaded()
+            },
         navigateToAuth = {
             navController.popBackStack()
             navController.navigate(Screen.Auth.route)
@@ -45,15 +48,16 @@ fun NavGraphBuilder.authRoute(
 
 fun NavGraphBuilder.homeRoute(
     navigateToHome: () -> Unit,
-    navigateToAuth: () -> Unit
+    navigateToAuth: () -> Unit,
+    onDataLoaded: () -> Unit
 ) {
     composable(route = Screen.Home.route) {
 
         HomeScreen(
             navigateToWrite = navigateToHome,
-            navigateToAuth = navigateToAuth
+            navigateToAuth = navigateToAuth,
+            onDataLoaded = onDataLoaded
         )
-
     }
 }
 

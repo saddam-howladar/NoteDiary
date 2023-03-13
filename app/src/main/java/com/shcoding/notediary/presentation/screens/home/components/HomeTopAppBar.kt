@@ -9,8 +9,9 @@ import androidx.compose.ui.res.stringResource
 import com.shcoding.notediary.R
 
 @Composable
-fun HomeTopAppBar(onClickMenu: () -> Unit) {
+fun HomeTopAppBar(scrollBehavior: TopAppBarScrollBehavior,onClickMenu: () -> Unit) {
     TopAppBar(
+        scrollBehavior = scrollBehavior,
         title = {
             Text(text = stringResource(id = R.string.app_name))
         },

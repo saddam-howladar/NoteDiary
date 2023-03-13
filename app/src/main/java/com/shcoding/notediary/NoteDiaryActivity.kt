@@ -1,6 +1,7 @@
 package com.shcoding.notediary
 
 import android.os.Bundle
+import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +17,13 @@ import com.shcoding.notediary.ui.theme.NoteDiaryTheme
 import io.realm.kotlin.mongodb.App
 
 class NoteDiaryActivity : ComponentActivity() {
+
+    private var keepSplashSceenOpened = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        installSplashScreen().setKeepOnScreenCondition {
+            keepSplashSceenOpened
+        }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             NoteDiaryTheme {
@@ -30,7 +35,10 @@ class NoteDiaryActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavigationGraph(
                         startDestination = getStartDestination(),
-                        navController = navController
+                        navController = navController,
+                        onDataLoaded = {
+                            keepSplashSceenOpened = false
+                        }
                     )
                 }
             }

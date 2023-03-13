@@ -66,7 +66,7 @@ fun DiaryGallery(
                         color = MaterialTheme.colorScheme.primaryContainer
                     ) {}
                     Text(
-                        text = "+$remainingImages",
+                        text = "+${remainingImages.value}",
                         fontSize = MaterialTheme.typography.bodyLarge.fontSize,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer

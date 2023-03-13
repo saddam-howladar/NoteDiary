@@ -1,7 +1,6 @@
 package com.shcoding.notediary.presentation.screens.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,9 +10,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.shcoding.notediary.BuildConfig.APP_ID
+import com.shcoding.notediary.common.utils.RequestState
+import com.shcoding.notediary.data.repository.Diaries
 import com.shcoding.notediary.domain.model.Diary
 import com.shcoding.notediary.presentation.screens.home.components.DateHeader
 import com.shcoding.notediary.presentation.screens.home.components.HomeNavigationDrawer
@@ -32,31 +35,78 @@ import java.time.LocalDate
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     navigateToWrite: () -> Unit,
-    navigateToAuth: () -> Unit
+    navigateToAuth: () -> Unit,
+    onDataLoaded: () -> Unit
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
+    var paddingValues by remember {
+        mutableStateOf(PaddingValues())
+    }
+    val diaries: Diaries = viewModel.diaries.value
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    LaunchedEffect(key1 = diaries) {
+        if (diaries !is RequestState.Loading) {
+            onDataLoaded()
+        }
+    }
 
     HomeNavigationDrawer(
         drawerState = drawerState,
         onclickSignOut = { viewModel.isSignOutDialogOpened(signOutState = true) }
     ) {
 
-        Scaffold(topBar = {
-            HomeTopAppBar {
-                coroutineScope.launch {
-                    drawerState.open()
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = {
+                HomeTopAppBar(scrollBehavior = scrollBehavior) {
+                    coroutineScope.launch {
+                        drawerState.open()
+                    }
                 }
-            }
-        },
+            },
             floatingActionButton = {
-                FloatingActionButton(onClick = { navigateToWrite() }) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+                        .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr)),
+                    onClick = { navigateToWrite() }
+                ) {
                     Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Icon")
                 }
             }) {
 
-            DiaryPage()
+            paddingValues = it
+
+            when (diaries) {
+                is RequestState.Success -> {
+                    DiaryPage(
+                        paddingValues = it,
+                        diaryNotes = diaries.data,
+                        onClick = {})
+                }
+                is RequestState.Error -> {
+
+                    EmptyPage(
+                        title = "Error",
+                        subTitle = "${(diaries.error.message)}"
+                    )
+
+                }
+                is RequestState.Loading -> {
+
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+
+                    }
+
+                }
+                else -> {}
+            }
 
 
         }
@@ -88,19 +138,28 @@ fun HomeScreen(
 
 @Composable
 fun DiaryPage(
-    diaryNotes: Map<LocalDate, List<Diary>> = mapOf(),
-    onClick: () -> Unit = {}
+    paddingValues: PaddingValues,
+    diaryNotes: Map<LocalDate, List<Diary>>,
+    onClick: () -> Unit
 ) {
+
 
     if (diaryNotes.isNotEmpty()) {
 
-        LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .padding(top = paddingValues.calculateTopPadding())
+                .padding(bottom = paddingValues.calculateBottomPadding())
+                .padding(start = paddingValues.calculateStartPadding(LayoutDirection.Ltr))
+                .padding(end = paddingValues.calculateEndPadding(LayoutDirection.Ltr))
+        ) {
             diaryNotes.forEach { (localDate, diaries) ->
 
                 stickyHeader(key = localDate) {
                     DateHeader(localDate = localDate)
                 }
-                items(items = diaries, key = { it._id }) {
+                items(items = diaries, key = { it._id.toString() }) {
                     DiaryHolder(diary = it, onClick = { onClick() })
                 }
 
@@ -108,7 +167,7 @@ fun DiaryPage(
         }
 
     } else {
-        EmptyPage()
+        EmptyPage(title = "Diary Error", subTitle = "No Diary available")
     }
 
 }

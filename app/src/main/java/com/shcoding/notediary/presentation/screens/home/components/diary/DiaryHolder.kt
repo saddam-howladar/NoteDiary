@@ -3,6 +3,10 @@ package com.shcoding.notediary.presentation.screens.home.components.diary
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -73,7 +77,12 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
                         )
                     }
                 }
-                AnimatedVisibility(visible = galleryState) {
+                AnimatedVisibility(visible = galleryState, enter = fadeIn() + expandVertically(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )) {
                     Column(modifier = Modifier.padding(all = 14.dp)) {
                         DiaryGallery(images = diary.images)
                     }
