@@ -29,7 +29,7 @@ fun HomeNavigationDrawer(
                 ) {
 
                     Image(
-                        modifier = Modifier.size(250.dp),
+                        modifier = Modifier.size(200.dp).padding(all = 40.dp),
                         painter = painterResource(id = R.drawable.app_logo),
                         contentDescription = "Drawer Logo"
                     )

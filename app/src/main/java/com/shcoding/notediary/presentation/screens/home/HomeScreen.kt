@@ -35,8 +35,7 @@ import java.time.LocalDate
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
     navigateToWrite: () -> Unit,
-    navigateToAuth: () -> Unit,
-    onDataLoaded: () -> Unit
+    navigateToAuth: () -> Unit
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -47,11 +46,7 @@ fun HomeScreen(
     val diaries: Diaries = viewModel.diaries.value
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    LaunchedEffect(key1 = diaries) {
-        if (diaries !is RequestState.Loading) {
-            onDataLoaded()
-        }
-    }
+
 
     HomeNavigationDrawer(
         drawerState = drawerState,
@@ -167,7 +162,7 @@ fun DiaryPage(
         }
 
     } else {
-        EmptyPage(title = "Diary Error", subTitle = "No Diary available")
+        EmptyPage()
     }
 
 }
